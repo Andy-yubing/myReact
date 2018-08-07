@@ -1,12 +1,20 @@
-import React, {
-  Component
-} from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Header from './components/header'
+import React, {Component} from 'react';
+import { LocaleProvider } from 'antd';
+import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import {
-  createStore
-} from 'redux';
+  Router,
+  Route,
+  Link,
+  Switch,
+  Prompt
+} from 'react-router-dom'
+import routerConfig from "./router";
+import logo from './logo.svg';
+import history from './history';
+import './App.css';
+// import Header from './components/header'
+import {createStore} from 'redux';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -14,12 +22,18 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <Header/>
-        { <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p> }
-      </div>
+      <LocaleProvider locale={zh_CN}>
+        <Router history={history}>
+          <Switch>
+           {
+             routerConfig.map(item => (
+               <Route path={item.path} key={item.path} exact={item.exact} component={ item.component } />
+             ))
+           }
+           {/* <Redirect from="/" to={stores.currentUser.currentUser ? '/Basic' : '/Login'} /> */}
+         </Switch>
+        </Router>
+      </LocaleProvider>
     );
   }
 }
